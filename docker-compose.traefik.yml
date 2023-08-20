@@ -21,6 +21,7 @@ services:
       - "8080:8080"
     networks:
       - traefik
+    restart: always
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
