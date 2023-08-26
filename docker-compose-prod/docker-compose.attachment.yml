@@ -1,0 +1,30 @@
+version: "3"
+services:
+
+  linx-server:
+    image: ${DOCKER_ATTACHMENT_IMAGE_NAME}
+    container_name: linx-server
+    restart: always
+    command: -config /data/linx-server.conf
+    volumes:
+      - ./data/linx/files:/data/files
+      - ./data/linx/meta:/data/meta
+      - ./config/attachment.conf:/data/linx-server.conf
+    networks:
+      - traefik
+    ports:
+      - 3088:8080
+    extra_hosts:
+      - "${DOCKER_ATTACHMENT_HOSTNAME}:0.0.0.0"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:8080"]
+      interval: 3s
+      retries: 12
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+
+networks:
+  traefik:
+    external: true

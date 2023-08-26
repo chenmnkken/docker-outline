@@ -1,8 +1,10 @@
 #!/bin/sh
 
-docker compose -f docker-compose.postgres.yml \
+docker compose \
+-f docker-compose.minio-init.yml \
+-f docker-compose.postgres.yml \
 -f docker-compose.redis.yml \
--f docker-compose.minio.yml \
--f docker-compose.attachment.yml \
--f docker-compose.sso.yml \
--f docker-compose.outline.yml up -d
+-f ./docker-compose-prod/docker-compose.minio.yml \
+-f ./docker-compose-prod/docker-compose.attachment.yml \
+-f ./docker-compose-prod/docker-compose.sso.yml \
+-f ./docker-compose-prod/docker-compose.outline.yml up -d
