@@ -2,7 +2,6 @@
 
 docker compose \ 
 -f docker-compose.traefik.yml \
--f docker-compose.minio-init.yml \
 -f docker-compose.postgres.yml \
 -f docker-compose.redis.yml \
 -f ./docker-compose-dev/docker-compose.minio.yml \
