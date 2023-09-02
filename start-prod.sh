@@ -1,7 +1,6 @@
 #!/bin/sh
 
 docker compose \
--f docker-compose.minio-init.yml \
 -f docker-compose.postgres.yml \
 -f docker-compose.redis.yml \
 -f ./docker-compose-prod/docker-compose.minio.yml \
