@@ -4,7 +4,6 @@ services:
   outline:
     image: ${DOCKER_OUTLINE_IMAGE_NAME}
     container_name: outline
-    command: sh -c "yarn sequelize:migrate --env production-ssl-disabled && yarn start"
     environment:
       - URL=${OUTLINE_URL}
       - FORCE_HTTPS=false
