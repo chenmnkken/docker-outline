@@ -1,6 +1,6 @@
 # README
 
-Self hosting [Outline]https://github.com/outline/outline) based on Docker And Nginx, from [docker-outline](https://github.com/soulteary/docker-outline)
+Self hosting [Outline](https://github.com/outline/outline) based on Docker And Nginx, from [docker-outline](https://github.com/soulteary/docker-outline).
 
 **中文用户配置教程**
 
