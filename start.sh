@@ -6,4 +6,5 @@ docker compose \
 -f docker-compose.minio.yml \
 -f docker-compose.sso.yml \
 -f docker-compose.outline.yml \
-down
+--env-file .env \
+up -d

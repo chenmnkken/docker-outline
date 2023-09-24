@@ -1,90 +1,59 @@
 # README
 
-This project is mainly used to demonstrate how to use privatized deployment (Self-Hosted).
+Self hosting [Outline]https://github.com/outline/outline) based on Docker And Nginx, from [docker-outline](https://github.com/soulteary/docker-outline)
 
-You can replace .env with a new version number to complete an unsense upgrade of the application.
+**中文用户配置教程**
 
-**中文用户可以阅读下面的配置教程**
-
-- https://soulteary.com/2021/09/05/opensource-documentation-wiki-software-outline-part-1.html
-- https://soulteary.com/2021/09/11/opensource-documentation-wiki-software-outline-part-2.html
+- https://blog.yiguochen.com/self-hosting-outline.html
 
 
-## Project Dependency
+### Project Dependency
 
-- Traefik: `traefik:v2.5`
-    - Used as a service gateway for various applications, providing service discovery, domain name binding and other functions.
-- Outline Server: `outlinewiki/outline:0.60.3`
+- Outline Server: `outlinewiki/outline:0.71.0`
     - Outline application.
-- S3 Server: `minio/minio:RELEASE.2021-09-03T03-56-13Z`
+- S3 Server: `minio/minio:RELEASE.2023-08-16T20-17-30Z`
     - Provide object storage capabilities.
-- S3 Client: `minio/mc:RELEASE.2021-09-02T09-21-27Z`
-    - Initialize the `bucket` required by the application
-- SSO Server: `soulteary/sso-server:1.1.5`
+- SSO Server: `authelia/authelia:4`
     - Make it possible for the outline to log in locally.
-- Database: `postgres:13.3`
+- Database: `postgres:15`
     - Store all document related data.
-- Redis: `redis:6.2.4`
+- Redis: `redis:7`
     - Cache service to make your application run faster.
-- Attachment: `andreimarcu/linx-server:version-2.3.8`
-    - Outline currently does not support attachments, this small tool can be used as a supplement.
 
 ### Usage
 
-0. Make a copy of the default configuration `.env.example` and save the file name as `.env`. Modify the content in  according to your needs, such as domain name, various "user names" and "passwords".
+1. Clone this repo to you local dir, and cd repo dir.
 
-```bash
-cp .env.example .env
+```shell
+git clone https://github.com/chenmnkken/docker-outline.git outline
+cd outline
 ```
 
-1. According to your actual situation, create a virtual network card to provide in-container and external services.
+2. Create a virtual network card to provide in-container and external services.
 
-```bash
-docker network create traefik
+```shell
 docker network create outline
 ```
 
-2. Use docker-compose to start the service. Wait for the status of all services to become `healthy`.
+3. Modify domain and secret field if you need in `.env` file.
 
-```bash
-docker-compose -f docker-compose.postgres.yml -f docker-compose.redis.yml -f docker-compose.minio.yml -f docker-compose.attachment.yml -f docker-compose.sso.yml -f docker-compose.outline.yml up -d
-Creating outline_minio    ... done
-Creating outline-postgres ... done
-Creating outline-redis    ... done
-Creating linx-server      ... done
-Creating outline          ... done
-Creating sso-server       ... done
+```shell
+vim .env
 ```
 
-3.  Use docker-compose to check if the service is ready.
+4. Config Authelia base authelia `.yml` files, it's sso server config.
 
+5. Start services.
 
-```bash
-docker-compose -f docker-compose.postgres.yml -f docker-compose.redis.yml -f docker-compose.minio.yml -f docker-compose.attachment.yml -f docker-compose.sso.yml -f docker-compose.outline.yml ps   
-      Name                    Command                  State        Ports  
----------------------------------------------------------------------------
-linx-server        /usr/local/bin/linx-server ...   Up (healthy)   8080/tcp
-outline            docker-entrypoint.sh sh -c ...   Up (healthy)   3000/tcp
-outline-postgres   docker-entrypoint.sh postgres    Up (healthy)   5432/tcp
-outline-redis      docker-entrypoint.sh redis ...   Up (healthy)   6379/tcp
-outline_minio      /usr/bin/docker-entrypoint ...   Up (healthy)   9000/tcp
-sso-server         docker-entrypoint.sh ./main      Up (healthy)   80/tcp   
+```shell
+./start.sh
 ```
 
-4. Create the bucket storage space required for the application
+6. Browser `http://$HOST-IP:9001` minio console, create `outline` bucket, and set access policy is public.
 
-It only needs to be executed when the application is first initialized.
+7. Config Nginx by `./nginx` conf files.
 
-```bash
-docker-compose -f docker-compose.minio-init.yml up 
-Recreating outline_minio_client ... done
-Attaching to docker-outline_minio-client_1
-minio-client_1  | Removed `local` successfully.
-minio-client_1  | Added `local` successfully.
-minio-client_1  | Bucket created successfully `local/outline/`.
-minio-client_1  | Access permission for `local/outline` is set to `public`
-docker-outline_minio-client_1 exited with code 0
-```
+8. Config your domain to server.
 
-5. Open the browser and enjoy.
+9. Browser `https://docs.example.com`.
 

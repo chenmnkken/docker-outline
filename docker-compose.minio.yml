@@ -3,7 +3,7 @@ services:
 
   minio:
     image: ${DOCKER_MINIO_IMAGE_NAME}
-    container_name: outline_minio
+    container_name: minio
     volumes:
       - ./data/minio/data:/data:z
     command: minio server /data --console-address 0.0.0.0:9001
@@ -12,19 +12,18 @@ services:
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - MINIO_REGION_NAME=${MINIO_REGION_NAME}
       - MINIO_BROWSER=${MINIO_BROWSER}
-      - MINIO_BROWSER_REDIRECT_URL=${MINIO_BROWSER_REDIRECT_URL}
     restart: always
     networks:
       - outline
-      - traefik
     ports:
-      - 3090:9000
+      - 9000:9000
+      - 9001:9001
     extra_hosts:
       - "${DOCKER_MINIO_HOSTNAME}:0.0.0.0"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 3s
-      retries: 12
+      interval: 30s
+      retries: 5
     logging:
       driver: "json-file"
       options:
@@ -32,6 +31,4 @@ services:
 
 networks:
   outline:
-    external: true
-  traefik:
     external: true

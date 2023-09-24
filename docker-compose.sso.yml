@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+  sso:
+    image: ${DOCKER_SSO_IMAGE_NAME}
+    container_name: ${DOCKER_SSO_HOSTNAME}
+    restart: always
+    volumes:
+      - ./authelia:/config
+    networks:
+      - outline
+    extra_hosts:
+      - "${SSO_SERVER_DOMAIN}:0.0.0.0"
+    ports:
+      - 9091:9091
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9091"]
+      interval: 30s
+      retries: 3
+    environment:
+      - TZ=Asia/Shanghai
+      - PUID=1000
+      - PGID=1000
+
+networks:
+  outline:
+    external: true    
+...

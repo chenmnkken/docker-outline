@@ -5,6 +5,7 @@ services:
     image: ${DOCKER_OUTLINE_IMAGE_NAME}
     container_name: outline
     environment:
+      - TZ=Asia/Shanghai
       - URL=${OUTLINE_URL}
       - FORCE_HTTPS=false
       # SSO
@@ -14,7 +15,6 @@ services:
       - OIDC_TOKEN_URI=${OIDC_TOKEN_URI}
       - OIDC_USERINFO_URI=${OIDC_USERINFO_URI}
       - OIDC_DISPLAY_NAME=${OIDC_DISPLAY_NAME}
-      - ALLOWED_DOMAINS=${OIDC_ALLOWED_DOMAINS}
       # DB
       - DATABASE_URL=${DATABASE_URL}
       - PGSSLMODE=${PGSSLMODE}
@@ -38,19 +38,12 @@ services:
       - SLACK_MESSAGE_ACTIONS=false
       - DEFAULT_LANGUAGE=en_US
     restart: always
-    # volumes:
-    #  - ./patches/...:/opt/outline/...
     networks:
-      - traefik
       - outline
     ports:
       - 3000:3000
     extra_hosts:
       - "${DOCKER_OUTLINE_HOSTNAME}:0.0.0.0"
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "http://localhost:3000"]
-      interval: 3s
-      retries: 12
     logging:
       driver: "json-file"
       options:
@@ -58,6 +51,4 @@ services:
 
 networks:
   outline:
-    external: true
-  traefik:
     external: true
