@@ -7,11 +7,11 @@
 
 # List of users
 users:
-  yiguochen:
+  username:
     disabled: false
-    displayname: "Yiguo Chen"
-    password: "$argon2id$v=19$m=65536,t=3,p=4$U/OwREIz25TATmHFCkt+kQ$YzyAQS8mImfNCNYQmCTKGPGDh7o7LSSxlZDCTdzrpzs"
-    email: chenmnkken@gmail.com
+    displayname: "Your Name"
+    password: "$argon2id$v=19$m=65536,t=3,p=4$U/OwREIz25TATmHFCkt+kQ$YzaAQS8mImfNCNYQmCTKGPGDh7o7MSSxlZDCTdzrpzs"
+    email: username@example.com
     groups:
       - admins
 ...
